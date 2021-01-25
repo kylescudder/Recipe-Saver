@@ -1,0 +1,115 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#recipeTable').dataTable({
+                "aoColumns": [
+                    { "sType": "html" },
+                    { "sType": "html" },
+                    {
+                        "type": "date",
+                        "render": function (data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                if (data !== null && data !== '') {
+                                    var isoDate = new Date(data).toISOString();
+                                    return moment(isoDate).format('DD/MM/YYYY');
+                                } else {
+                                    return 'Not recorded';
+                                }
+                            }
+                            return data;
+                        }
+                    }
+                ],
+                "columnDefs": [
+                    { "targets": 0 },
+                    { "targets": 1 },
+                    { "targets": 2 }
+                ],
+                "pagingType": "numbers",
+                "paging": false,
+                "order": [0, 'desc'],
+                "language": {
+                    "emptyTable": "No data available in table"
+                },
+                stateSave: true
+            });
+
+        });
+        function getMonday(d) {
+            d = new Date(d);
+            var day = d.getDay(),
+                diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+            DateString = ('0' + new Date(d.setDate(diff)).getDate()).slice(-2) + '/'
+                + ('0' + (new Date(d.setDate(diff)).getMonth() + 1)).slice(-2) + '/'
+                + new Date(d.setDate(diff)).getFullYear();
+            $('#recipeTable').DataTable().search(DateString).draw();
+            //document.querySelector(".form-control-sm").value = DateString;
+        }
+    </script>
+}
+<div class="row pt-4">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Add
+        </button>
+        <button type="button" class="btn btn-primary" onclick="return getMonday(new Date());">
+            This weeks meals
+        </button>
+        <table id="recipeTable" class="table table-striped table-borderless recipeTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Recipe</th>
+                    <th>Link</th>
+                    <th>For week commencing</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Recipes)
+                {
+                    <tr>
+                        <td>
+                            @item.RecipeName
+                        </td>
+                        <td>
+                            <a href="@item.RecipeLink">@item.RecipeLink</a>
+                        </td>
+                        <td>
+                            @item.ForWeekCommencing
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post">
+                <div class="modal-body">
+                    <label>Name</label>
+                    <input type="text" name="txtRecipeName" class="form-control" required />
+                    <label>Link</label>
+                    <input type="text" name="txtRecipeLink" class="form-control" required />
+                    <label>For Week Commencing</label>
+                    <input type="date" name="txtForWeekCommencing" class="form-control" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
