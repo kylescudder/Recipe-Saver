@@ -26,12 +26,13 @@
                     }
                 ],
                 "columnDefs": [
-                    { "targets": 0 },
-                    { "targets": 1 },
-                    { "targets": 2 }
+                    { responsivePriority: 2, "targets": 0 },
+                    { responsivePriority: 3, "targets": 1 },
+                    { responsivePriority: 1, "targets": 2 }
                 ],
                 "pagingType": "numbers",
                 "paging": false,
+                responsive: true,
                 "order": [0, 'desc'],
                 "language": {
                     "emptyTable": "No data available in table"
