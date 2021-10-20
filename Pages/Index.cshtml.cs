@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -35,6 +36,19 @@ namespace Recipe_Saver.Pages
                     , Request.Form["txtRecipeLink"].ToString()
                     , Convert.ToDateTime(Request.Form["txtForWeekCommencing"]));
                 return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> OnPostArchive(IFormCollection collection)
+        {
+            try
+            {
+                _recipeSaver.ArchiveRecipe(Convert.ToInt32(Request.Form["RecipeListID"]));
+				return RedirectToPage("./Index", new { @redirect = "archive" });
             }
             catch (Exception ex)
             {

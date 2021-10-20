@@ -4,54 +4,64 @@
     ViewData["Title"] = "Home page";
 }
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#recipeTable').dataTable({
-                "aoColumns": [
-                    { "sType": "html" },
-                    { "sType": "html" },
-                    {
-                        "type": "date",
-                        "render": function (data, type, row) {
-                            if (type === 'display' || type === 'filter') {
-                                if (data !== null && data !== '') {
-                                    var isoDate = new Date(data).toISOString();
-                                    return moment(isoDate).format('DD/MM/YYYY');
-                                } else {
-                                    return 'Not recorded';
-                                }
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#recipeTable').dataTable({
+            "aoColumns": [
+                { "sType": "html" },
+                { "sType": "html" },
+                {
+                    "type": "date",
+                    "render": function (data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            if (data !== null && data !== '') {
+                                var isoDate = new Date(data).toISOString();
+                                return moment(isoDate).format('DD/MM/YYYY');
+                            } else {
+                                return 'Not recorded';
                             }
-                            return data;
                         }
+                        return data;
                     }
-                ],
-                "columnDefs": [
-                    { responsivePriority: 2, "targets": 0 },
-                    { responsivePriority: 3, "targets": 1 },
-                    { responsivePriority: 1, "targets": 2 }
-                ],
-                "pagingType": "numbers",
-                "paging": false,
-                responsive: true,
-                "order": [0, 'desc'],
-                "language": {
-                    "emptyTable": "No data available in table"
                 },
-                stateSave: true
-            });
-
+                { "sType": "html" }
+            ],
+            "columnDefs": [
+                { responsivePriority: 1, "targets": 0 },
+                { responsivePriority: 3, "targets": 1 },
+                { responsivePriority: 4, "targets": 2 },
+                { responsivePriority: 2, "targets": 3 }
+            ],
+            "pagingType": "numbers",
+            "paging": false,
+            responsive: true,
+            "order": [0, 'desc'],
+            "language": {
+                "emptyTable": "No data available in table"
+            },
+            stateSave: true
         });
-        function getMonday(d) {
-            d = new Date(d);
-            var day = d.getDay(),
-                diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
-            DateString = ('0' + new Date(d.setDate(diff)).getDate()).slice(-2) + '/'
-                + ('0' + (new Date(d.setDate(diff)).getMonth() + 1)).slice(-2) + '/'
-                + new Date(d.setDate(diff)).getFullYear();
-            $('#recipeTable').DataTable().search(DateString).draw();
-            //document.querySelector(".form-control-sm").value = DateString;
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectParam = urlParams.get('redirect');
+        console.log(redirectParam)
+        if (redirectParam == "archive") {
+            $('.archivedAlert').modal();
+            setTimeout(function () {
+                $('.archivedAlert').modal('hide');
+            }, 1000);
         }
-    </script>
+    });
+    function getMonday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+        DateString = ('0' + new Date(d.setDate(diff)).getDate()).slice(-2) + '/'
+            + ('0' + (new Date(d.setDate(diff)).getMonth() + 1)).slice(-2) + '/'
+            + new Date(d.setDate(diff)).getFullYear();
+        $('#recipeTable').DataTable().search(DateString).draw();
+        //document.querySelector(".form-control-sm").value = DateString;
+    }
+</script>
 }
 <div class="row pt-4">
     <div class="col-12">
@@ -67,6 +77,7 @@
                     <th>Recipe</th>
                     <th>Link</th>
                     <th>For week commencing</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -82,13 +93,21 @@
                         <td>
                             @item.ForWeekCommencing
                         </td>
+                        <td>
+                            <form method="post" asp-page-handler="Archive">
+                                <input type="hidden" value="@item.RecipeListID" name="RecipeListID" />
+                                <button type="submit" class="btn btn-danger btnArchive"><i class="fas fa-archive"></i>
+                                    Archive</button>
+                            </form>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -111,6 +130,13 @@
                     <button type="submit" class="btn btn-primary">Add</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade archivedAlert" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="alert alert-success text-center" role="alert">
+            Archived successful!
         </div>
     </div>
 </div>

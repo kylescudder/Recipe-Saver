@@ -14,13 +14,10 @@ namespace Recipe_Saver.Data
     public class RecipeData : IRecipeData
     {
         private readonly ISqlDb _dataAccess;
-        //private readonly IHttpContextAccessor _httpContextAccessor;
         public RecipeData(ISqlDb dataAccess
-            //, IHttpContextAccessor httpContextAccessor
             )
         {
             _dataAccess = dataAccess;
-            //_httpContextAccessor = httpContextAccessor;
         }
         public RecipeList RecipeList { get; set; }
         public async Task<List<RecipeList>> GetRecipeList()
@@ -38,6 +35,15 @@ namespace Recipe_Saver.Data
                                             RecipeName,
                                             RecipeLink,
                                             ForWeekCommencing
+                                        },
+                                        "Default");
+        }
+        public Task<int> ArchiveRecipe(int RecipeListID)
+        {
+            return _dataAccess.SaveData("scud97_kssu.spArchiveRecipe",
+                                        new
+                                        {
+                                            RecipeListID
                                         },
                                         "Default");
         }
