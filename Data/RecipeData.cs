@@ -27,14 +27,13 @@ namespace Recipe_Saver.Data
                                                               "Default");
             return recs;
         }
-        public Task<int> AddRecipe(string RecipeName, string RecipeLink, DateTime ForWeekCommencing)
+        public Task<int> AddRecipe(string RecipeName, string RecipeLink)
         {
             return _dataAccess.SaveData("scud97_kssu.spAddRecipe",
                                         new
                                         {
                                             RecipeName,
-                                            RecipeLink,
-                                            ForWeekCommencing
+                                            RecipeLink
                                         },
                                         "Default");
         }

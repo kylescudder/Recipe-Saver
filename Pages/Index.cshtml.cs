@@ -40,8 +40,7 @@ namespace Recipe_Saver.Pages
 			try
 			{
 				await _recipeSaver.AddRecipe(Request.Form["txtRecipeName"].ToString()
-						, Request.Form["txtRecipeLink"].ToString()
-						, Convert.ToDateTime(Request.Form["txtForWeekCommencing"]));
+						, Request.Form["txtRecipeLink"].ToString());
 				return RedirectToPage("./Index");
 			}
 			catch (Exception ex)
