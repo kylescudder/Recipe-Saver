@@ -50,6 +50,10 @@
                 $('.archivedAlert').modal('hide');
             }, 1000);
         }
+        $(".btnArchive").on("click", function () {
+            $(".archiveID").val(this.id)
+            $(".archiveConfirm").modal();
+        })
     });
     function getMonday(d) {
         d = new Date(d);
@@ -94,11 +98,9 @@
                             @item.ForWeekCommencing
                         </td>
                         <td>
-                            <form method="post" asp-page-handler="Archive">
-                                <input type="hidden" value="@item.RecipeListID" name="RecipeListID" />
-                                <button type="submit" class="btn btn-danger btnArchive"><i class="fas fa-archive"></i>
-                                    Archive</button>
-                            </form>
+                            <button type="button" class="btn btn-danger btnArchive" id="@item.RecipeListID"><i
+                                class="fas fa-archive"></i>
+                                Archive</button>
                         </td>
                     </tr>
                 }
@@ -128,6 +130,29 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade archiveConfirm" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" asp-page-handler="Archive">
+                <div class="modal-body">
+                    Are you sure you want to archive that meal?
+                    <input type="hidden" class="archiveID" name="RecipeListID" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Archive</button>
                 </div>
             </form>
         </div>
