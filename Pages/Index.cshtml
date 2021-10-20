@@ -39,6 +39,18 @@
             $(".archiveID").val(this.id)
             $(".archiveConfirm").modal();
         })
+        $("#url").on("click", function () {
+            if ($("#url").is(':checked')) {
+                $(".RecipeLink").removeClass("d-none");
+                $(".RecipeBook").addClass("d-none");
+            }
+        })
+        $("#book").on("click", function () {
+            if ($("#book").is(':checked')) {
+                $(".RecipeLink").addClass("d-none");
+                $(".RecipeBook").removeClass("d-none");
+            }
+        })
     });
 </script>
 }
@@ -90,8 +102,22 @@
                 <div class="modal-body">
                     <label>Name</label>
                     <input type="text" name="txtRecipeName" class="form-control" required />
-                    <label>Link</label>
-                    <input type="text" name="txtRecipeLink" class="form-control" required />
+                    <label>Where from</label><br />
+                    @* <input type="text" name="txtRecipeLink" class="form-control" required /> *@
+                    <input type="radio" id="book" name="recipeLocation" value="Book">
+                    <label for="book">Book</label><br />
+                    <input type="radio" id="url" name="recipeLocation" value="URL">
+                    <label for="url">URL</label><br />
+                    <div class="RecipeLink d-none">
+                        <label>Link</label>
+                        <input type="text" name="txtRecipeLink" id="txtRecipeLink" class="form-control" />
+                    </div>
+                    <div class="RecipeBook d-none">
+                        <label>Book</label>
+                        <input type="text" name="txtRecipeBook" id="txtRecipeBook" class="form-control" />
+                        <label>Page No.</label>
+                        <input type="num" name="txtRecipePageNo" id="txtRecipePageNo" class="form-control" />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
