@@ -40,7 +40,9 @@ namespace Recipe_Saver.Pages
 			try
 			{
 				await _recipeSaver.AddRecipe(Request.Form["txtRecipeName"].ToString()
-						, Request.Form["txtRecipeLink"].ToString());
+						, Request.Form["txtRecipeLink"].ToString()
+						, Request.Form["txtRecipeBook"].ToString()
+						, Request.Form["txtRecipePageNo"]);
 				return RedirectToPage("./Index");
 			}
 			catch (Exception ex)
@@ -49,19 +51,19 @@ namespace Recipe_Saver.Pages
 				throw new Exception(ex.ToString());
 			}
 		}
-        [HttpPost]
-        public async Task<IActionResult> OnPostArchive(IFormCollection collection)
-        {
-            try
-            {
-                await _recipeSaver.ArchiveRecipe(Convert.ToInt32(Request.Form["RecipeListID"]));
-				return RedirectToPage("./Index", new { @redirect = "archive" });
-            }
-            catch (Exception ex)
-            {
-                SentrySdk.CaptureException(ex);
-                throw new Exception(ex.ToString());
-            }
-        }
+		[HttpPost]
+		public async Task<IActionResult> OnPostArchive(IFormCollection collection)
+		{
+				try
+				{
+						await _recipeSaver.ArchiveRecipe(Convert.ToInt32(Request.Form["RecipeListID"]));
+		return RedirectToPage("./Index", new { @redirect = "archive" });
+				}
+				catch (Exception ex)
+				{
+						SentrySdk.CaptureException(ex);
+						throw new Exception(ex.ToString());
+				}
+		}
 	}
 }
